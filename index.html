@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Connect - Connecting Students for Learning and Socializing</title>
+    <meta name="description" content="Student Connect helps students interact with peers, solve questions, and socialize through random meetings and invited study sessions.">
+    <link rel="stylesheet" href="styles-trial.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script>
+    <script src='https://meet.jit.si/external_api.js'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.js"></script>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <a href="#home" class="logo" onclick="showSection('home')">Student Connect</a>
+            <button id="menu-toggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul id="nav-menu">
+                <li><a href="#home" onclick="showSection('home')"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="#random-meeting" onclick="showSection('random-meeting')"><i class="fas fa-random"></i> Random Meeting</a></li>
+                <li><a href="#invite-meeting" onclick="showSection('invite-meeting')"><i class="fas fa-user-plus"></i> Invite Meeting</a></li>
+                <li><a href="#video-call" onclick="showSection('video-call')"><i class="fas fa-video"></i> Video Call</a></li>
+                <li><a href="#announcements" onclick="showSection('announcements')"><i class="fas fa-bullhorn"></i> Announcements</a></li>
+                <li><a href="#about" onclick="showSection('about')"><i class="fas fa-info-circle"></i> About</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main id="home" class="section container">
+        <h1>Welcome to Student Connect</h1>
+        <p class="subtitle">Connecting students from different backgrounds to help them solve questions and socialize.</p>
+        <div class="features">
+            <div class="feature" onclick="showSection('random-meeting')" tabindex="0" role="button">
+                <img src="students.jpg" alt="Students in a group discussion" loading="lazy">
+                <h2><i class="fas fa-random"></i> Random Meeting Generator</h2>
+                <p>Join spontaneous study sessions with peers.</p>
+            </div>
+            <div class="feature" onclick="showSection('invite-meeting')" tabindex="0" role="button">
+                <img src="join meet.webp" alt="Friends studying together" loading="lazy">
+                <h2><i class="fas fa-user-plus"></i> Invite a Friend</h2>
+                <p>Set up private study groups with friends.</p>
+            </div>
+            <div class="feature" onclick="showSection('announcements')" tabindex="0" role="button">
+                <img src="board.webp" alt="Bulletin board with announcements" loading="lazy">
+                <h2><i class="fas fa-bullhorn"></i> Announcements</h2>
+                <p>Stay updated on the latest questions and discussions.</p>
+            </div>
+        </div>
+    </main>
+
+    <main id="about" class="section container">
+        <h1>About Student Connect</h1>
+        <div class="about-content">
+            <p>Student Connect is an innovative platform designed to revolutionize the way students interact, learn, and socialize in the digital age. Our mission is to create a vibrant, inclusive community where knowledge sharing and peer support thrive.</p>
+    
+            <img src="team.webp" alt="Students collaborating on a project" class="about-image" loading="lazy">
+    
+            <h2>Our Vision</h2>
+            <p>We envision a world where every student has access to a global network of peers, breaking down geographical barriers and fostering cross-cultural understanding. Through our platform, we aim to:</p>
+            <ul>
+                <li><i class="fas fa-lightbulb"></i> Facilitate spontaneous learning opportunities</li>
+                <li><i class="fas fa-users"></i> Encourage collaborative problem-solving</li>
+                <li><i class="fas fa-globe"></i> Promote diverse perspectives in academic discussions</li>
+                <li><i class="fas fa-hands-helping"></i> Build a supportive community for students worldwide</li>
+            </ul>
+    
+            <h2>Key Features</h2>
+            <ol>
+                <li><strong><i class="fas fa-random"></i> Random Meeting Generator:</strong> Connect with peers from around the globe to discuss academic topics, share insights, and solve problems together.</li>
+                <li><strong><i class="fas fa-user-plus"></i> Invite a Friend:</strong> Create private study groups for focused collaboration on specific subjects or projects.</li>
+                <li><strong><i class="fas fa-video"></i> Video Calls:</strong> Engage in face-to-face discussions with high-quality video and audio, making distance learning more personal and effective.</li>
+                <li><strong><i class="fas fa-bullhorn"></i> Announcements Board:</strong> Stay informed about the latest questions, discussions, and community events.</li>
+            </ol>
+    
+            <p>Join Student Connect today and be part of a revolution in peer-to-peer learning and global student networking!</p>
+        </div>
+    </main>
+
+    <main id="random-meeting" class="section container">
+        <h1>Random Meeting Generator</h1>
+        <p class="subtitle">Post your question to join a random meeting with other students.</p>
+        <div class="meeting-generator">
+            <input type="text" id="random-question" placeholder="Enter your question" aria-label="Enter your question">
+            <button onclick="postQuestion()"><i class="fas fa-paper-plane"></i> Post Question</button>
+        </div>
+    </main>
+
+    <main id="invite-meeting" class="section container">
+        <h1>Invite Meeting Generator</h1>
+        <p class="subtitle">Invite your friends to a meeting.</p>
+        <div class="meeting-generator">
+            <input type="text" id="invite-email" placeholder="Enter email addresses (comma-separated)" aria-label="Enter email addresses">
+            <button onclick="generateInviteMeeting()"><i class="fas fa-envelope"></i> Send Invites</button>
+        </div>
+    </main>
+
+    <main id='video-call' class='section container'>
+        <h1>Video Call</h1>
+        <div id='jitsi-container'></div>
+        <div class='chat-container'>
+            <div id='chat-messages' class='chat-messages'></div>
+            <div class="chat-input-container">
+                <input type='text' id='chat-input' placeholder='Type your message...' aria-label='Type your message'>
+                <button id='send-chat'><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </main>
+
+    <main id='announcements' class='section container'>
+        <h1>Announcements</h1>
+        <div id='announcements-list'>
+            <!-- Questions will dynamically appear here -->
+        </div>
+    </main>
+
+    <main id="question-details" class="section container">
+        <div class="question-card">
+            <h2 id="question-title"></h2>
+            <p id="posted-time" class="question-meta"></p>
+            <div id="answer-section">
+                <textarea id="knowledge-input" placeholder="Share your knowledge about this topic..."></textarea>
+                <button onclick="submitKnowledge()" class="primary-button">Submit Knowledge</button>
+            </div>
+            <div id="chat-section" style="display: none;">
+                <div id="question-chat-messages" class="chat-messages"></div>
+                <div class="chat-input-container">
+                    <input type="text" id="question-chat-input" placeholder="Type your message...">
+                    <button onclick="sendQuestionMessage()" class="primary-button">Send</button>
+                </div>
+            </div>
+            <div id="meeting-section" style="display: none;">
+                <button onclick="joinQuestionMeeting()" class="primary-button">Join Meeting</button>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class='container'>
+            <p>&copy; 2024 Student Connect. All rights reserved.</p>
+            <nav>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+            </nav>
+        </div>
+    </footer>
+
+    <script src="scripts.js"></script>
+</body>
+</html>
