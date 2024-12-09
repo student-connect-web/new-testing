@@ -152,7 +152,7 @@ function sendQuestionMessage() {
     chatInput.value = '';
     setTimeout(() => {
         if (document.querySelectorAll('#question-chat-messages .chat-message').length > 4) {
-            displayQuestionMessage('Host', 'Great! I can see you have good knowledge about this topic. I\'m approving your meeting access.', 'received');
+            displayQuestionMessage('Host', 'Great! I can see you some knowledge about this topic. I\'m approving your meeting access.', 'received');
             setTimeout(() => {
                 document.getElementById('meeting-section').style.display = 'block';
             }, 1000);
